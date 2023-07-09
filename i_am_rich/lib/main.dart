@@ -11,8 +11,7 @@ void main() {
           title: Text("I Am Rich"),
           backgroundColor: Colors.greenAccent,
         ),
-        body: Center(
-            child: Image(image: NetworkImage('https://picsum.photos/200'))),
+        body: Center(child: Image(image: AssetImage('images/diamond.png'))),
       ),
     ),
   );
