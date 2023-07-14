@@ -13,7 +13,7 @@ class XyloApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.deepPurpleAccent,
         body: SafeArea(
-          child: Container(),
+          child: Center(),
         ),
       ),
     );
