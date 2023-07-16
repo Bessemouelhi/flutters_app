@@ -14,17 +14,30 @@ class XyloApp extends StatelessWidget {
     await player.play(AssetSource('note$index.wav'));
   }
 
-  Expanded buildBtnSound(double size, int index, Color color) {
+  static const List<Color> xyloColors = <Color>[
+    Colors.red,
+    Colors.orange,
+    Colors.yellow,
+    Colors.greenAccent,
+    Colors.green,
+    Colors.blue,
+    Colors.purple
+  ];
+
+  Expanded buildBtnSound(BuildContext context, int index, Color color) {
+    double mysize = MediaQuery.of(context).size.width / 2;
+    double addSize = mysize / 7;
+
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.only(right: size),
+        padding: EdgeInsets.only(right: mysize - addSize * index),
         child: TextButton(
           onPressed: () {
             playSound(index);
           },
           child: Text(''),
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(color),
+            backgroundColor: MaterialStateProperty.all(xyloColors[index - 1]),
           ),
         ),
       ),
@@ -33,9 +46,6 @@ class XyloApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mysize = MediaQuery.of(context).size.width / 2;
-    double addSize = mysize / 7;
-
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.black,
@@ -46,13 +56,13 @@ class XyloApp extends StatelessWidget {
               // for (var i = 0; i < 3; i++) ...[
               //   buildBtnSound(mysize - addSize * 1, 1, Colors.red),
               // ],
-              buildBtnSound(mysize - addSize * 1, 1, Colors.red),
-              buildBtnSound(mysize - addSize * 2, 2, Colors.orange),
-              buildBtnSound(mysize - addSize * 3, 3, Colors.yellow),
-              buildBtnSound(mysize - addSize * 4, 4, Colors.greenAccent),
-              buildBtnSound(mysize - addSize * 5, 5, Colors.green),
-              buildBtnSound(mysize - addSize * 6, 6, Colors.blue),
-              buildBtnSound(mysize - addSize * 7, 7, Colors.purple),
+              buildBtnSound(context, 1, Colors.red),
+              buildBtnSound(context, 2, Colors.orange),
+              buildBtnSound(context, 3, Colors.yellow),
+              buildBtnSound(context, 4, Colors.greenAccent),
+              buildBtnSound(context, 5, Colors.green),
+              buildBtnSound(context, 6, Colors.blue),
+              buildBtnSound(context, 7, Colors.purple),
             ],
           ),
         ),
