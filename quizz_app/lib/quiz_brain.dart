@@ -31,7 +31,17 @@ class QuizBrain {
         true),
   ];
 
-  String getQuestion(int index) {
-    return _questionList[index].question;
+  void nextQuestion() {
+    if (_questionNumber < _questionList.length - 1) {
+      _questionNumber++;
+    }
+  }
+
+  String getQuestion() {
+    return _questionList[_questionNumber].question;
+  }
+
+  bool getAnswer() {
+    return _questionList[_questionNumber].answer;
   }
 }

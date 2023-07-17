@@ -40,15 +40,6 @@ class _QuizzPageState extends State<QuizzPage> {
       'Approximately one quarter of human bones are in the feet.', true);
   Question q3 = Question('A slug\'s blood is green.', true);
 
-  List<Question> questionList = [
-    Question('You can lead a cow down stairs but not up stairs.', false),
-    Question('Approximately one quarter of human bones are in the feet.', true),
-    Question('A slug\'s blood is green.', true),
-  ];
-  //questionList.add(q1);
-
-  int current = 0;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,7 +52,7 @@ class _QuizzPageState extends State<QuizzPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.questionList[current].question,
+                quizBrain.getQuestion(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -86,6 +77,13 @@ class _QuizzPageState extends State<QuizzPage> {
                 ),
               ),
               onPressed: () {
+                bool correct = quizBrain.getAnswer();
+                if (correct == true) {
+                  print('Correct');
+                } else {
+                  print('Not Correct !');
+                }
+
                 setState(() {
                   scoreKeeper.add(
                     const Icon(
@@ -93,14 +91,8 @@ class _QuizzPageState extends State<QuizzPage> {
                       color: Colors.green,
                     ),
                   );
-                  bool correct = quizBrain.questionList[current].answer;
-                  if (correct == true) {
-                    print('Correct');
-                  } else {
-                    print('Not Correct !');
-                  }
-                  current++;
-                  print(scoreKeeper.length);
+
+                  quizBrain.nextQuestion();
                 });
               },
             ),
@@ -122,6 +114,13 @@ class _QuizzPageState extends State<QuizzPage> {
               ),
               onPressed: () {
                 //The user picked false.
+                bool correct = quizBrain.getAnswer();
+                if (correct == false) {
+                  print('Correct');
+                } else {
+                  print('Not Correct !');
+                }
+
                 setState(() {
                   scoreKeeper.add(
                     const Icon(
@@ -129,14 +128,8 @@ class _QuizzPageState extends State<QuizzPage> {
                       color: Colors.red,
                     ),
                   );
-                  bool correct = quizBrain.questionList[current].answer;
-                  if (correct == false) {
-                    print('Correct');
-                  } else {
-                    print('Not Correct !');
-                  }
-                  current++;
-                  print(scoreKeeper.length);
+
+                  quizBrain.nextQuestion();
                 });
               },
             ),
