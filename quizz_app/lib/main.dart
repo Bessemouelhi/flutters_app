@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quizz_app/question.dart';
+import 'package:quizz_app/quiz_brain.dart';
+
+QuizBrain quizBrain = QuizBrain();
 
 void main() {
   runApp(const QuizzApp());
@@ -58,7 +61,7 @@ class _QuizzPageState extends State<QuizzPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questionList[current].question,
+                quizBrain.questionList[current].question,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -90,7 +93,7 @@ class _QuizzPageState extends State<QuizzPage> {
                       color: Colors.green,
                     ),
                   );
-                  bool correct = questionList[current].answer;
+                  bool correct = quizBrain.questionList[current].answer;
                   if (correct == true) {
                     print('Correct');
                   } else {
@@ -126,7 +129,7 @@ class _QuizzPageState extends State<QuizzPage> {
                       color: Colors.red,
                     ),
                   );
-                  bool correct = questionList[current].answer;
+                  bool correct = quizBrain.questionList[current].answer;
                   if (correct == false) {
                     print('Correct');
                   } else {
