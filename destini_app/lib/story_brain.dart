@@ -53,36 +53,39 @@ class StoryBrain {
 //TODO: Step 25 - Change the storyNumber property into a private property so that only story_brain.dart has access to it. You can do this by right clicking on the name (storyNumber) and selecting Refactor -> Rename to make the change across all the places where it's used.
 
 //TODO: Step 16 - Create a property called storyNumber which starts with a value of 0. This will be used to track which story the user is currently viewing.
+  void setStoryNumber(int num) {
+    _storyNumber = num;
+  }
 
 //TODO: Step 17 - Create a method called nextStory(), it should not have any outputs but it should have 1 input called choiceNumber which will be the choice number (int) made by the user.
   void nextStory(choiceNumber) {
-    if (_storyNumber == 0) {
-      if (choiceNumber == 1) {
-        _storyNumber = 2;
-      } else {
-        _storyNumber = 1;
-      }
+    switch (_storyNumber) {
+      case 0:
+        if (choiceNumber == 1) _storyNumber = 2;
+        if (choiceNumber == 2) _storyNumber = 1;
+        break;
+      case 1:
+        if (choiceNumber == 1) _storyNumber = 2;
+        if (choiceNumber == 2) _storyNumber = 3;
+        break;
+      case 2:
+        if (choiceNumber == 1) _storyNumber = 5;
+        if (choiceNumber == 2) _storyNumber = 4;
+        break;
+      case 3:
+        restart();
+        break;
+      case 4:
+        restart();
+        break;
+      case 5:
+        restart();
+        break;
     }
 
-    if (_storyNumber == 1) {
-      if (choiceNumber == 1) {
-        _storyNumber = 2;
-      } else {
-        _storyNumber = 3;
-      }
-    }
-
-    if (_storyNumber == 2) {
-      if (choiceNumber == 1) {
-        _storyNumber = 5;
-      } else {
-        _storyNumber = 4;
-      }
-    }
-
-    if (_storyNumber == 3 || _storyNumber == 4 || _storyNumber == 5) {
-      restart();
-    }
+    // if (storyNumber == 3 || storyNumber == 4 || storyNumber == 5) {
+    //   restart();
+    // }
 
     print('_storyNumber');
     print(_storyNumber);

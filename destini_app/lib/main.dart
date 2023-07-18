@@ -1,9 +1,6 @@
 import 'package:destini_app/story_brain.dart';
 import 'package:flutter/material.dart';
 
-//TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
-StoryBrain storyBrain = StoryBrain();
-
 void main() {
   runApp(const Destini());
 }
@@ -19,6 +16,9 @@ class Destini extends StatelessWidget {
     );
   }
 }
+
+//TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
+StoryBrain storyBrain = StoryBrain();
 
 class StoryPage extends StatefulWidget {
   const StoryPage({super.key});
