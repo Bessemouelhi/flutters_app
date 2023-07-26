@@ -33,7 +33,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather', {
       'lat': '$latitude',
       'lon': '$longitude',
-      'appid': '046a483de056e505394bd58129b9a572'
+      'appid': '0429b9a572'
     });
     http.Response response = await http.get(uri);
 
