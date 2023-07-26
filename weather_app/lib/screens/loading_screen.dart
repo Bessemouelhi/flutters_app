@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/config.dart';
 import 'package:weather_app/services/location.dart';
 import 'package:http/http.dart' as http;
-
-const apiKey = '0d58129b9a572';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -30,11 +29,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getData() async {
-    Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather', {
-      'lat': '$latitude',
-      'lon': '$longitude',
-      'appid': '0429b9a572'
-    });
+    Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather',
+        {'lat': '$latitude', 'lon': '$longitude', 'appid': apiKey});
     http.Response response = await http.get(uri);
 
     if (response.statusCode == 200) {
