@@ -37,6 +37,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
       String data = response.body;
       //print(data);
 
+      var lat = jsonDecode(data)['coord']['lat'];
+      var lon = jsonDecode(data)['coord']['lon'];
       var temp = jsonDecode(data)['main']['temp'];
       var condition = jsonDecode(data)['weather'][0]['id'];
       var city = jsonDecode(data)['name'];
@@ -45,6 +47,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
       print('temp : $temp');
       print('condition : $condition');
       print('city : $city');
+      print('lat : $lat');
+      print('lon : $lon');
     }
 
     print(response.statusCode);
