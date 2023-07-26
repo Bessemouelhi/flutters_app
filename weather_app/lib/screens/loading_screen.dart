@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/services/location.dart';
 import 'package:http/http.dart' as http;
 
-const apiKey = '046a483de056e505394bd58129b9a572';
+const apiKey = '0d58129b9a572';
 
 class LoadingScreen extends StatefulWidget {
   @override
