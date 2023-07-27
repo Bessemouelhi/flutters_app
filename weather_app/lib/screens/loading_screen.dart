@@ -1,10 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/config.dart';
+import 'package:weather_app/screens/location_screen.dart';
 import 'package:weather_app/services/location.dart';
-import 'package:http/http.dart' as http;
+import 'package:weather_app/services/networking.dart';
+import 'package:weather_app/services/weather.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -14,64 +15,60 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   double? latitude;
   double? longitude;
+  var weatherData;
 
-  getLocation() async {
+  void getLocationData() async {
     //LocationPermission checkPermission = await Geolocator.checkPermission();
     //LocationPermission requestPermission = await Geolocator.requestPermission();
-    Location location = Location();
-    await location.getCurrentLocation();
-    latitude = location.latitude;
-    longitude = location.longitude;
-    print('latitude : $latitude');
-    print('longitude : $longitude');
+    WeatherModel weatherModel = WeatherModel();
+    weatherData = await weatherModel.getLocationWeather();
 
-    getData();
-  }
+    var lat = weatherData['coord']['lat'];
+    var lon = weatherData['coord']['lon'];
+    var temp = weatherData['main']['temp'];
+    var condition = weatherData['weather'][0]['id'];
+    var city = weatherData['name'];
+    var weather = weatherData['weather'][0]['description'];
+    print('weather : $weather');
+    print('temp : $temp');
+    print('condition : $condition');
+    print('city : $city');
+    print('lat : $lat');
+    print('lon : $lon');
 
-  void getData() async {
-    Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather',
-        {'lat': '$latitude', 'lon': '$longitude', 'appid': apiKey});
-    http.Response response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      String data = response.body;
-      //print(data);
-
-      var lat = jsonDecode(data)['coord']['lat'];
-      var lon = jsonDecode(data)['coord']['lon'];
-      var temp = jsonDecode(data)['main']['temp'];
-      var condition = jsonDecode(data)['weather'][0]['id'];
-      var city = jsonDecode(data)['name'];
-      var weather = jsonDecode(data)['weather'][0]['description'];
-      print('weather : $weather');
-      print('temp : $temp');
-      print('condition : $condition');
-      print('city : $city');
-      print('lat : $lat');
-      print('lon : $lon');
-    }
-
-    print(response.statusCode);
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LocationScreen(
+        locationWeather: weatherData,
+      );
+    }));
   }
 
   @override
   void initState() {
     super.initState();
     print('LoadingScreen : initState');
-    getLocation();
+    getLocationData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            //Get the current location
-            //getLocation();
-            getData();
-          },
-          child: Text('Get Location'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SpinKitWave(
+              color: Colors.white,
+              size: 50.0,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //Get the current location
+                //getLocation();
+              },
+              child: Text('Get Location'),
+            ),
+          ],
         ),
       ),
     );

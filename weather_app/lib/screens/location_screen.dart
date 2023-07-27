@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/services/weather.dart';
 import 'package:weather_app/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
+  LocationScreen({this.locationWeather});
+
+  final locationWeather;
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  WeatherModel model = WeatherModel();
+  int? temperature;
+  String message = '...';
+  int? condition;
+  IconData? iconData;
+  String wIcon = '☁️';
+  String? cityName;
+  String weatherDesc = "...";
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.locationWeather);
+    updateUI(widget.locationWeather);
+  }
+
+  void updateUI(dynamic data) {
+    double temp = data['main']['temp'];
+    temperature = temp.toInt();
+    message = model.getMessage(temperature!);
+    condition = data['weather'][0]['id'];
+    wIcon = model.getWeatherIcon(condition!);
+    cityName = data['name'];
+    weatherDesc = data['weather'][0]['description'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +60,12 @@ class _LocationScreenState extends State<LocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var data = await model.getLocationWeather();
+                      setState(() {
+                        updateUI(data);
+                      });
+                    },
                     child: Icon(
                       Icons.near_me,
                       size: 50.0,
@@ -44,27 +80,40 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(70, 211, 211, 211),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '32°',
+                      '$temperature°',
                       style: kTempTextStyle,
                     ),
                     Text(
-                      '☀️',
+                      wIcon,
                       style: kConditionTextStyle,
                     ),
                   ],
                 ),
+                margin: EdgeInsets.all(15.0),
               ),
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's 🍦 time in San Francisco!",
+                  weatherDesc,
                   textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
+                  style: kShadowTextStyle,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Text(
+                  '$message à $cityName',
+                  textAlign: TextAlign.left,
+                  style: kShadowTextStyle,
                 ),
               ),
             ],
