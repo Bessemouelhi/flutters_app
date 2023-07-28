@@ -1,8 +1,26 @@
+import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../config.dart';
 import 'location.dart';
 import 'networking.dart';
 
 class WeatherModel {
+  getCityWeather(String city) async {
+    Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather', {
+      'q': city,
+      'appid': apiKey,
+      'units': 'metric',
+      'lang': 'fr',
+    });
+
+    NetworkHelper networkHelper = NetworkHelper(uri);
+
+    var weatherData = await networkHelper.getData();
+
+    return weatherData;
+  }
+
   Future<dynamic> getLocationWeather() async {
     Location location = Location();
     await location.getCurrentLocation();
@@ -39,6 +57,26 @@ class WeatherModel {
       return '☁️';
     } else {
       return '🤷‍';
+    }
+  }
+
+  IconData getWeatherIconData(int condition) {
+    if (condition < 300) {
+      return FontAwesomeIcons.cloudBolt;
+    } else if (condition < 400) {
+      return FontAwesomeIcons.cloudRain;
+    } else if (condition < 600) {
+      return FontAwesomeIcons.umbrella;
+    } else if (condition < 700) {
+      return FontAwesomeIcons.snowflake;
+    } else if (condition < 800) {
+      return FontAwesomeIcons.smog;
+    } else if (condition == 800) {
+      return FontAwesomeIcons.sun;
+    } else if (condition <= 804) {
+      return FontAwesomeIcons.cloud;
+    } else {
+      return FontAwesomeIcons.userInjured;
     }
   }
 
