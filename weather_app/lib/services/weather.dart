@@ -21,9 +21,9 @@ class WeatherModel {
     return weatherData;
   }
 
-  Future<dynamic> getLocationWeather() async {
+  Future<dynamic> getLocationWeather(BuildContext context) async {
     Location location = Location();
-    await location.getCurrentLocation();
+    await location.getCurrentLocation(context);
 
     Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather', {
       'lat': '${location.latitude}',

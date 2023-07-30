@@ -70,7 +70,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   TextButton(
                     onPressed: () async {
-                      var data = await model.getLocationWeather();
+                      var data = await model.getLocationWeather(context);
                       setState(() {
                         updateUI(data);
                       });
