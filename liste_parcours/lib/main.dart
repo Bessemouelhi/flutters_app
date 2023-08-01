@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:liste_parcours/list_place.dart';
+import 'package:liste_parcours/pages/grid_page.dart';
+import 'package:liste_parcours/pages/list_page.dart';
 
 import 'course.dart';
 
@@ -12,14 +15,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: (orientation == Orientation.portrait) ? ListPage() : GridPage()
+        // const MyHomePage(title: 'Flutter Demo Home Page'),
+        );
   }
 }
 
@@ -84,35 +89,36 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: ListView.separated(
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(maListeCourses[index].element),
-                leading: Text(index.toString()),
-                trailing: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      maListeCourses[index].update();
-                    });
-                  },
-                  icon: Icon((maListeCourses[index].bought)
-                      ? Icons.check_box
-                      : Icons.check_box_outline_blank),
-                ),
-                onTap: () {
-                  print('${index + 1} : ${courses[index]}');
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: ListView.separated(
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(maListeCourses[index].element),
+              leading: Text(index.toString()),
+              trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    maListeCourses[index].update();
+                  });
                 },
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                color: Colors.lightBlue,
-              );
-            },
-            itemCount: maListeCourses.length));
+                icon: Icon((maListeCourses[index].bought)
+                    ? Icons.check_box
+                    : Icons.check_box_outline_blank),
+              ),
+              onTap: () {
+                print('${index + 1} : ${courses[index]}');
+              },
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              color: Colors.lightBlue,
+            );
+          },
+          itemCount: maListeCourses.length),
+    );
   }
 }
 
