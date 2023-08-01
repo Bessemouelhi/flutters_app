@@ -25,7 +25,7 @@ class Location {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      showSnackBar(context, 'Location services are disabled.');
+      showSnackBar(context, 'Location services are denied Forever.');
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
