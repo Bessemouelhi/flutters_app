@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liste_parcours/model/data_source.dart';
+import 'package:liste_parcours/navigator_helper.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -23,7 +24,9 @@ class _ListPageState extends State<ListPage> {
               title: Text(place.name),
               leading: Text((index + 1).toString()),
               trailing: Image.asset(place.getFolderPath()),
-              onTap: () {},
+              onTap: () {
+                NavigatorHelper().toDetail(context: context, place: place);
+              },
             );
           },
           separatorBuilder: (BuildContext context, int index) =>
