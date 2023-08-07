@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ma_rando/models/parcours.dart';
 import 'package:ma_rando/models/parcours_list.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -66,6 +67,15 @@ class DatabaseClient {
     await db.delete('list', where: 'id = ?', whereArgs: [itemList.id]);
     //Supprimer aussi tous les articles liés.
     //await db.delete('article', where: 'list = ?', whereArgs: [itemList.id]);
+    return true;
+  }
+
+  Future<bool> upsert(Parcours parcours) async {
+    Database db = await database;
+    (parcours.id == null)
+        ? parcours.id = await db.insert('article', parcours.toMap())
+        : await db.update('article', parcours.toMap(),
+            where: 'id = ?', whereArgs: [parcours.id]);
     return true;
   }
 }

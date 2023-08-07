@@ -26,4 +26,21 @@ class Parcours {
         date = map["date"],
         image = map["image"],
         list = map["list"];
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      'nom': nom,
+      'distance': distance,
+      'depart_lat': depart_lat,
+      'depart_lng': depart_lng,
+      'duree': duree,
+      'difficulte': difficulte,
+      'note': note,
+      'date': date,
+      'image': image,
+      'list': list,
+    };
+    if (id != null) map['id'] = id;
+    return map;
+  }
 }

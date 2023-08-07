@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ma_rando/services/database_client.dart';
+import 'package:ma_rando/views/parcours_list_view.dart';
 import 'package:ma_rando/views/parcours_list_tile.dart';
 import 'package:ma_rando/views/widgets/add_dialog.dart';
 import 'package:ma_rando/views/widgets/custom_app_bar.dart';
@@ -75,7 +76,11 @@ class _HomePageState extends State<HomePage> {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  onListPressed(ParcoursList parcoursList) {}
+  onListPressed(ParcoursList parcoursList) {
+    final next = ParcoursListView(parcoursList: parcoursList);
+    MaterialPageRoute pageRoute = MaterialPageRoute(builder: (context) => next);
+    Navigator.of(context).push(pageRoute);
+  }
 
   onDeleteItem(ParcoursList parcoursList) {
     DatabaseClient().removeItem(parcoursList).then((success) => getList());
