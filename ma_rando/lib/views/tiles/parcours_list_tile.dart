@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/parcours_list.dart';
+import '../../models/parcours_list.dart';
 
 class ParcoursListTile extends StatelessWidget {
   ParcoursList parcoursList;

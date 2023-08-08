@@ -1,6 +1,6 @@
 class Parcours {
-  int id;
-  String nom;
+  int? id;
+  String? nom;
   double? distance;
   double? depart_lat;
   double? depart_lng;
@@ -9,7 +9,7 @@ class Parcours {
   int? note;
   int? date;
   String? image;
-  int list;
+  int? list;
 
   Parcours(this.id, this.nom, this.distance, this.depart_lat, this.depart_lng,
       this.duree, this.difficulte, this.note, this.date, this.image, this.list);
@@ -42,5 +42,10 @@ class Parcours {
     };
     if (id != null) map['id'] = id;
     return map;
+  }
+
+  @override
+  String toString() {
+    return 'Parcours{id: $id, nom: $nom, distance: $distance, depart_lat: $depart_lat, depart_lng: $depart_lng, duree: $duree, difficulte: $difficulte, note: $note, date: $date, image: $image, list: $list}';
   }
 }

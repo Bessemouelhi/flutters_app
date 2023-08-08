@@ -1,63 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:ma_rando/models/parcours_list.dart';
-import 'package:ma_rando/views/home_page.dart';
-import 'package:ma_rando/views/navigation_home.dart';
-import 'package:ma_rando/views/parcours_list_view.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
-}
-
-/*class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'List Parcours',
-      theme: ThemeData(primaryColor: Colors.blue),
-      home: NavigationHome(title: 'Home'),
-      //home: ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
-    );
-  }
-}*/
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'NavigationBar Demo'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
+class NavigationHome extends StatefulWidget {
   final String title;
-
-  const MyHomePage({
+  const NavigationHome({
     Key? key,
     required this.title,
   }) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<NavigationHome> createState() => _NavigationHomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int currentPageIndex = 0;
-
+class _NavigationHomeState extends State<NavigationHome> {
   @override
   Widget build(BuildContext context) {
+    int currentPageIndex = 0;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('widget.title'),
       ),
       // NavigationBar Example
       bottomNavigationBar: NavigationBar(
@@ -83,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
+            print('index : $index');
           });
         },
         selectedIndex: currentPageIndex,
@@ -93,7 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
         //labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
       body: <Widget>[
-        ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
+        Container(
+          color: Colors.lightBlue,
+          alignment: Alignment.center,
+          child: const Text('Blue!'),
+        ),
         Container(
           color: Colors.orange,
           alignment: Alignment.center,

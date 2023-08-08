@@ -30,7 +30,7 @@ class DatabaseClient {
     ''');
 
     await database.execute('''
-    CREATE TABLE parcours(
+    CREATE TABLE parcours (
       id INTEGER PRIMARY KEY,
       nom TEXT NOT NULL,
       distance REAL,
@@ -39,7 +39,7 @@ class DatabaseClient {
       duree REAL,
       difficulte INTEGER,
       note INTEGER,
-      date INTEGER,
+      date INTEGER NOT NULL DEFAULT (cast(strftime('%s','now') as int)),
       image TEXT,
       list INTEGER
     )
@@ -73,9 +73,22 @@ class DatabaseClient {
   Future<bool> upsert(Parcours parcours) async {
     Database db = await database;
     (parcours.id == null)
-        ? parcours.id = await db.insert('article', parcours.toMap())
-        : await db.update('article', parcours.toMap(),
+        ? parcours.id = await db.insert('parcours', parcours.toMap())
+        : await db.update('parcours', parcours.toMap(),
             where: 'id = ?', whereArgs: [parcours.id]);
     return true;
+  }
+
+  Future<List<Parcours>> parcoursFromId(int id) async {
+    Database db = await database;
+    List<Map<String, dynamic>> mapList =
+        await db.query('parcours', where: 'list = ?', whereArgs: [id]);
+    return mapList.map((map) => Parcours.fromMap(map)).toList();
+  }
+
+  Future<List<Parcours>> parcoursAll() async {
+    Database db = await database;
+    List<Map<String, dynamic>> mapList = await db.query('parcours');
+    return mapList.map((map) => Parcours.fromMap(map)).toList();
   }
 }

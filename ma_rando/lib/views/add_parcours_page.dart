@@ -9,7 +9,7 @@ import 'package:ma_rando/views/widgets/custom_app_bar.dart';
 import '../services/database_client.dart';
 
 class AddParcoursPage extends StatefulWidget {
-  int listId;
+  int? listId;
   AddParcoursPage({required this.listId});
 
   @override
@@ -17,24 +17,27 @@ class AddParcoursPage extends StatefulWidget {
 }
 
 class AddState extends State<AddParcoursPage> {
-  late TextEditingController nameController;
-  late TextEditingController shopController;
-  late TextEditingController priceController;
+  late TextEditingController nomController;
+  late TextEditingController distanceController;
+  late TextEditingController dureeController;
+  late TextEditingController difficulteController;
   String? imagePath;
 
   @override
   void initState() {
-    nameController = TextEditingController();
-    shopController = TextEditingController();
-    priceController = TextEditingController();
+    nomController = TextEditingController();
+    distanceController = TextEditingController();
+    dureeController = TextEditingController();
+    difficulteController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    shopController.dispose();
-    priceController.dispose();
+    nomController.dispose();
+    distanceController.dispose();
+    dureeController.dispose();
+    difficulteController.dispose();
     super.dispose();
   }
 
@@ -76,20 +79,19 @@ class AddState extends State<AddParcoursPage> {
                           icon: const Icon(Icons.photo_library_outlined)),
                     ],
                   ),
-                  AddTextfield(hint: "Nom", controller: nameController),
+                  AddTextfield(hint: "Nom", controller: nomController),
                   AddTextfield(
                       hint: "Distance",
-                      controller: priceController,
+                      controller: distanceController,
                       type: TextInputType.number),
                   AddTextfield(
                       hint: "Durée",
-                      controller: priceController,
+                      controller: dureeController,
                       type: TextInputType.number),
                   AddTextfield(
                       hint: "Difficulté",
-                      controller: priceController,
+                      controller: difficulteController,
                       type: TextInputType.number),
-                  AddTextfield(hint: "Magasin", controller: shopController)
                 ],
               ),
             )
@@ -100,15 +102,26 @@ class AddState extends State<AddParcoursPage> {
   }
 
   addPressed() {
-    FocusScope.of(context).requestFocus(FocusNode());
-    if (nameController.text.isEmpty) return;
+    FocusScope.of(context).requestFocus(FocusNode()); //fermeture du clavier
+    if (nomController.text.isEmpty) return;
     Map<String, dynamic> map = {'list': widget.listId};
-    map["nom"] = nameController.text;
-    if (shopController.text.isNotEmpty) map[""] = shopController.text;
-    double duree = double.tryParse(priceController.text) ?? 0.0;
+    map["nom"] = nomController.text;
+    if (distanceController.text.isNotEmpty) map[""] = distanceController.text;
+    double distance = double.tryParse(distanceController.text) ?? 0.0;
+    map["distance"] = distance;
+    if (dureeController.text.isNotEmpty) map[""] = dureeController.text;
+    double duree = double.tryParse(dureeController.text) ?? 0.0;
     map["duree"] = duree;
+    if (difficulteController.text.isNotEmpty)
+      map[""] = difficulteController.text;
+    num difficulte = int.tryParse(difficulteController.text) ?? 0;
+    map["difficulte"] = difficulte;
+    map["note"] = 0;
+    map["date"] = DateTime.now().millisecondsSinceEpoch;
     if (imagePath != null) map["image"] = imagePath!;
+    print(map);
     Parcours parcours = Parcours.fromMap(map);
+    print(parcours);
     DatabaseClient().upsert(parcours).then((success) => Navigator.pop(context));
   }
 
