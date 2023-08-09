@@ -32,8 +32,17 @@ class _ParcoursListViewState extends State<ParcoursListView> {
         callback: addNewParcours,
       ),
       body: ListView.builder(
-        itemBuilder: ((context, index) =>
-            ParcoursTile(parcours: _parcours[index])),
+        itemBuilder: ((context, index) => ParcoursTile(
+              parcours: _parcours[index],
+              onUpdate: () {
+                print('ParcoursTile ${_parcours[index]}');
+                updateParcours(_parcours[index]);
+              },
+              onDelete: () {
+                print('ParcoursTile ${_parcours[index]}');
+                deleteParcours(context, _parcours[index]);
+              },
+            )),
         itemCount: _parcours.length,
       ),
     );
@@ -52,5 +61,18 @@ class _ParcoursListViewState extends State<ParcoursListView> {
     print('listId : ${widget.parcoursList.id}');
     final route = MaterialPageRoute(builder: (context) => next);
     Navigator.of(context).push(route).then((value) => getParcours());
+  }
+
+  updateParcours(Parcours parcours) {
+    final next =
+        AddParcoursPage(listId: widget.parcoursList.id, parcours: parcours);
+    print('listId : ${widget.parcoursList.id}');
+    final route = MaterialPageRoute(builder: (context) => next);
+    Navigator.of(context).push(route).then((value) => getParcours());
+  }
+
+  deleteParcours(BuildContext context, Parcours parcours) {
+    print('on delete');
+    DatabaseClient().removeItem(parcours).then((success) => getParcours());
   }
 }

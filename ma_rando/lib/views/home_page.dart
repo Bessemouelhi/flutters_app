@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onDeleteItem(ParcoursList parcoursList) {
-    DatabaseClient().removeItem(parcoursList).then((success) => getList());
+    print('onDeleteItem parcoursList');
+    //DatabaseClient().removeItem(parcoursList).then((success) => getList());
   }
 }

@@ -62,11 +62,11 @@ class DatabaseClient {
   }
 
   //Supprimer liste
-  Future<bool> removeItem(ParcoursList itemList) async {
+  Future<bool> removeItem(Parcours parcours) async {
     Database db = await database;
-    await db.delete('list', where: 'id = ?', whereArgs: [itemList.id]);
-    //Supprimer aussi tous les articles liés.
-    //await db.delete('article', where: 'list = ?', whereArgs: [itemList.id]);
+    //await db.delete('list', where: 'id = ?', whereArgs: [itemList.id]);
+    //Supprimer aussi tous les parcours liés.
+    await db.delete('parcours', where: 'id = ?', whereArgs: [parcours.id]);
     return true;
   }
 

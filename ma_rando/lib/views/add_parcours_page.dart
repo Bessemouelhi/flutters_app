@@ -10,7 +10,8 @@ import '../services/database_client.dart';
 
 class AddParcoursPage extends StatefulWidget {
   int? listId;
-  AddParcoursPage({required this.listId});
+  Parcours? parcours;
+  AddParcoursPage({required this.listId, this.parcours});
 
   @override
   AddState createState() => AddState();
@@ -29,6 +30,10 @@ class AddState extends State<AddParcoursPage> {
     distanceController = TextEditingController();
     dureeController = TextEditingController();
     difficulteController = TextEditingController();
+
+    if (widget.parcours != null) {
+      fillForm(widget.parcours!);
+    }
     super.initState();
   }
 
@@ -101,10 +106,19 @@ class AddState extends State<AddParcoursPage> {
     );
   }
 
+  fillForm(Parcours parcours) {
+    nomController.text = parcours.nom!;
+    distanceController.text = parcours.distance!.toString();
+    dureeController.text = parcours.duree!.toString();
+    difficulteController.text = parcours.difficulte!.toString();
+    imagePath = parcours.image;
+  }
+
   addPressed() {
     FocusScope.of(context).requestFocus(FocusNode()); //fermeture du clavier
     if (nomController.text.isEmpty) return;
     Map<String, dynamic> map = {'list': widget.listId};
+    if (widget.parcours != null) map["id"] = widget.parcours?.id;
     map["nom"] = nomController.text;
     if (distanceController.text.isNotEmpty) map[""] = distanceController.text;
     double distance = double.tryParse(distanceController.text) ?? 0.0;
