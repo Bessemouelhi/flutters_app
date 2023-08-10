@@ -11,8 +11,11 @@ class HomeMapController extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<Position>(
       future: LocationManager().start(),
-      builder: ((context, position) =>
-          (position.hasData) ? MapPage() : NoDataController()),
+      builder: ((context, position) => (position.hasData)
+          ? MapPage(
+              startPosition: position.data!,
+            )
+          : NoDataController()),
     );
   }
 }
