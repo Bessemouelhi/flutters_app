@@ -25,7 +25,7 @@ class MapView extends StatelessWidget {
           userAgentPackageName: 'dev.fleaflet.flutter_map.example',
         ),
         CurrentLocationLayer(
-          followOnLocationUpdate: FollowOnLocationUpdate.always,
+            /*followOnLocationUpdate: FollowOnLocationUpdate.always,
           turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
           style: LocationMarkerStyle(
             marker: const DefaultLocationMarker(
@@ -36,8 +36,8 @@ class MapView extends StatelessWidget {
             ),
             markerSize: const Size(20, 20),
             markerDirection: MarkerDirection.heading,
-          ),
-        ),
+          ),*/
+            ),
         /*LocationMarkerLayer(
           position: LocationMarkerPosition(
             accuracy: 10,

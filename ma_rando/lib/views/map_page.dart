@@ -63,6 +63,14 @@ class _MapPageState extends State<MapPage> {
             widget.startPosition.latitude, widget.startPosition.longitude),
         zoom: 12,
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        label: const Text('Enregistrer'),
+        backgroundColor: Colors.green,
+        icon: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -73,7 +81,7 @@ class _MapPageState extends State<MapPage> {
   locationTapped() {
     setState(() {
       shouldFollow = !shouldFollow;
-      //shouldFollow ? observePositionChanges() : stopObserving();
+      shouldFollow ? observePositionChanges() : stopObserving();
     });
   }
 
