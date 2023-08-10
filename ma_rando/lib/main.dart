@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ma_rando/controller/home_map_controller.dart';
+import 'package:ma_rando/controller/welcome_controller.dart';
 import 'package:ma_rando/models/parcours_list.dart';
 import 'package:ma_rando/views/home_page.dart';
 import 'package:ma_rando/views/navigation_home.dart';
@@ -93,11 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: <Widget>[
         ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
         HomeMapController(),
-        Container(
-          color: Colors.pink,
-          alignment: Alignment.center,
-          child: const Text('Pink'),
-        ),
+        WelcomeController(),
         Container(
           color: Colors.purple,
           alignment: Alignment.center,
