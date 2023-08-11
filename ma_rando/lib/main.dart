@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_rando/controller/home_map_controller.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
@@ -6,8 +7,9 @@ import 'package:ma_rando/views/home_page.dart';
 import 'package:ma_rando/views/navigation_home.dart';
 import 'package:ma_rando/views/parcours_list_view.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -54,6 +56,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

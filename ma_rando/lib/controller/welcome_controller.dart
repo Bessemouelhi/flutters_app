@@ -1,4 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ma_rando/controller/ProfileController.dart';
+import 'package:ma_rando/controller/login_controller.dart';
+import 'package:ma_rando/controller/register_controller.dart';
+import 'package:ma_rando/views/widgets/profile_page.dart';
+
+import '../views/widgets/rounded_button.dart';
 
 class WelcomeController extends StatefulWidget {
   @override
@@ -6,6 +13,35 @@ class WelcomeController extends StatefulWidget {
 }
 
 class _WelcomeControllerState extends State<WelcomeController> {
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
+  }
+
+  final _auth = FirebaseAuth.instance;
+  //final _firestore = FirebaseFirestore.instance;
+  late User loggedInUser;
+
+  Future<void> getCurrentUser() async {
+    final user = _auth.currentUser;
+    try {
+      if (user != null) {
+        loggedInUser = user;
+        print('loggedInUser.email ${loggedInUser.email}');
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ProfilePage(loggedInUser: loggedInUser)));
+      }
+    } catch (e) {
+      print(e);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => WelcomeController()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,41 +70,28 @@ class _WelcomeControllerState extends State<WelcomeController> {
             SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to login screen.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
+            RoundedButton(
+              title: 'Login',
+              color: Colors.lightBlueAccent,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => LoginController(),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to registration screen.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
+            RoundedButton(
+              title: 'Register',
+              color: Colors.blueAccent,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => RegistrationController(),
                   ),
-                ),
-              ),
+                );
+                //Navigator.pushNamed(context, RegistrationController.id);
+              },
             ),
           ],
         ),
