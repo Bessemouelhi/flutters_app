@@ -67,7 +67,7 @@ class _LoginControllerState extends State<LoginController> {
                   elevation: 5.0,
                   child: MaterialButton(
                     onPressed: () async {
-                      print('on registration');
+                      print('on login');
                       setState(() {
                         showSpinner = true;
                       });
@@ -86,6 +86,10 @@ class _LoginControllerState extends State<LoginController> {
                           });
                         }
                       } catch (e) {
+                        setState(() {
+                          showSpinner = false;
+                        });
+                        //Navigator.of(context).pop;
                         print(e);
                       }
                     },

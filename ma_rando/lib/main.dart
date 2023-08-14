@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ma_rando/controller/LoginWrapper.dart';
 import 'package:ma_rando/controller/home_map_controller.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
 import 'package:ma_rando/models/parcours_list.dart';
 import 'package:ma_rando/views/home_page.dart';
 import 'package:ma_rando/views/navigation_home.dart';
 import 'package:ma_rando/views/parcours_list_view.dart';
+import 'package:ma_rando/views/profile/auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -101,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: <Widget>[
         ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
         HomeMapController(),
-        WelcomeController(),
+        AuthPage(),
         Container(
           color: Colors.purple,
           alignment: Alignment.center,

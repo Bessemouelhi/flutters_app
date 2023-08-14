@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
 
 class ProfileAppBar extends StatelessWidget {
-  final User? user;
+  final user;
   final auth;
   const ProfileAppBar({this.user, this.auth});
 
@@ -18,7 +18,7 @@ class ProfileAppBar extends StatelessWidget {
           height: 30,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: DecorationImage(image: NetworkImage(user!.photoURL!)),
+            //image: DecorationImage(image: NetworkImage(user!.photoURL!)),
           ),
         ),
         title: RichText(

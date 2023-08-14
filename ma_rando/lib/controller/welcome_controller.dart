@@ -21,14 +21,14 @@ class _WelcomeControllerState extends State<WelcomeController> {
 
   final _auth = FirebaseAuth.instance;
   //final _firestore = FirebaseFirestore.instance;
-  late User loggedInUser;
+  late var loggedInUser;
 
   Future<void> getCurrentUser() async {
     final user = _auth.currentUser;
     try {
       if (user != null) {
         loggedInUser = user;
-        print('loggedInUser.email ${loggedInUser.email}');
+        print('User is logged - email ${loggedInUser.email}');
 
         Navigator.push(
             context,
