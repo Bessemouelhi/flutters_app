@@ -10,6 +10,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _auth = FirebaseAuth.instance;
+    final user = _auth.currentUser;
     //final _firestore = FirebaseFirestore.instance;
 
     /*Future<void> getCurrentUser() async {
@@ -31,7 +32,7 @@ class ProfilePage extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             ProfileAppBar(
-              user: loggedInUser,
+              user: user,
               auth: _auth,
             )
           ],

@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -12,12 +15,33 @@ class _AuthPageState extends State<AuthPage> {
   var _isLogin = true;
   var _enteredEmail = '';
   var _enteredPassword = '';
-  void _submit() {
+  Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-      print(_enteredEmail);
-      print(_enteredPassword);
+    if (!isValid) {
+      return;
+    }
+    _formKey.currentState!.save();
+
+    try {
+      if (_isLogin) {
+        final userCredential = await _firebase.signInWithEmailAndPassword(
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+        print('login : $userCredential');
+      } else {
+        final userCredential = await _firebase.createUserWithEmailAndPassword(
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+      }
+    } on FirebaseAuthException catch (error) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(error.message ?? 'Autentication failed.'),
+        duration: Duration(seconds: 5),
+      ));
+      print(error);
     }
   }
 
@@ -81,7 +105,7 @@ class _AuthPageState extends State<AuthPage> {
                           const SizedBox(height: 12),
                           ElevatedButton(
                             onPressed: _submit,
-                            child: Text(_isLogin ? 'Signup' : 'Login'),
+                            child: Text(_isLogin ? 'Login' : 'Signup'),
                           ),
                           TextButton(
                             onPressed: () {

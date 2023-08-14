@@ -7,6 +7,7 @@ import 'package:ma_rando/models/parcours_list.dart';
 import 'package:ma_rando/views/home_page.dart';
 import 'package:ma_rando/views/navigation_home.dart';
 import 'package:ma_rando/views/parcours_list_view.dart';
+import 'package:ma_rando/views/profile/ProfileNavigator.dart';
 import 'package:ma_rando/views/profile/auth.dart';
 
 Future<void> main() async {
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: <Widget>[
         ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
         HomeMapController(),
-        AuthPage(),
+        ProfileNavigator(),
         Container(
           color: Colors.purple,
           alignment: Alignment.center,

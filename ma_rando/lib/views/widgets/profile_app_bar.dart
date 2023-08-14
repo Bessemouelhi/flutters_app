@@ -26,7 +26,7 @@ class ProfileAppBar extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '${user!.displayName}\n',
+                text: '{user!.displayName}\n',
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
@@ -55,11 +55,11 @@ class ProfileAppBar extends StatelessWidget {
   }
 
   signOut(BuildContext context) {
-    //Navigator.of(context).pop;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    Navigator.of(context).pop;
+    /*WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => WelcomeController()));
-    });
+    });*/
     auth.signOut();
   }
 }
