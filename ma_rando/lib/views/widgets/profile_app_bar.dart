@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
 
 class ProfileAppBar extends StatelessWidget {
   final user;
-  final auth;
-  const ProfileAppBar({this.user, this.auth});
+  final FirebaseFirestore auth;
+  ProfileAppBar({this.user, required this.auth});
+
+  var userData = auth.collection('users').doc(user?.uid).get();
 
   @override
   Widget build(BuildContext context) {

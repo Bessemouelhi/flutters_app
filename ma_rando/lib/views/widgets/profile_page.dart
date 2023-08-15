@@ -1,17 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
 import 'package:ma_rando/views/widgets/profile_app_bar.dart';
 
 class ProfilePage extends StatelessWidget {
-  final loggedInUser;
-  const ProfilePage({super.key, required this.loggedInUser});
+  final _auth;
+  const ProfilePage({super.key, required dynamic loggedInUser})
+      : _auth = loggedInUser;
 
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
-    final user = _auth.currentUser;
-    //final _firestore = FirebaseFirestore.instance;
+    final _user = _auth.currentUser;
+    var _userData;
+
+    getUserdata() async {
+      _userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_user?.uid)
+          .get();
+    }
 
     /*Future<void> getCurrentUser() async {
       final user = _auth.currentUser;
@@ -32,7 +40,7 @@ class ProfilePage extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             ProfileAppBar(
-              user: user,
+              user: _user,
               auth: _auth,
             )
           ],

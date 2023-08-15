@@ -21,6 +21,7 @@ class _AuthPageState extends State<AuthPage> {
   var _isLogin = true;
   var _enteredEmail = '';
   var _enteredPassword = '';
+  var _enteredUsername = '';
   File? _selectedImage;
   var _isOnAuth = false;
 
@@ -63,7 +64,7 @@ class _AuthPageState extends State<AuthPage> {
             .collection('users')
             .doc(userCredential.user!.uid)
             .set({
-          'username': '',
+          'username': _enteredUsername,
           'email': _enteredEmail,
           'image_url': imageUrl,
         });
@@ -130,6 +131,23 @@ class _AuthPageState extends State<AuthPage> {
                               _enteredEmail = value!;
                             },
                           ),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration:
+                                  const InputDecoration(labelText: 'Username'),
+                              enableSuggestions: false,
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.trim().length < 4) {
+                                  return 'Please enter at least 4 characteres.';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _enteredUsername = value!;
+                              },
+                            ),
                           TextFormField(
                             decoration:
                                 const InputDecoration(labelText: 'Password'),

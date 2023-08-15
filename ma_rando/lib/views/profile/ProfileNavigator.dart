@@ -23,6 +23,10 @@ class ProfileNavigator extends StatelessWidget {
             return const SplashScreen();
           }
           if (snapshot.hasData) {
+            /*final userData = FirebaseFirestore.instance
+                .collection('users')
+                .doc(_user?.uid)
+                .get();*/
             return ProfilePage(loggedInUser: FirebaseAuth.instance);
           }
 
