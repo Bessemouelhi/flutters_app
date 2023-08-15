@@ -5,10 +5,10 @@ import 'package:ma_rando/controller/welcome_controller.dart';
 
 class ProfileAppBar extends StatelessWidget {
   final user;
-  final FirebaseFirestore auth;
+  final auth;
   ProfileAppBar({this.user, required this.auth});
 
-  var userData = auth.collection('users').doc(user?.uid).get();
+  //var userData = auth.collection('users').doc(user?.uid).get();
 
   @override
   Widget build(BuildContext context) {
