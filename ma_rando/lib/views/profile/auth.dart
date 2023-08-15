@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:ma_rando/views/profile/user_image_picker.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -12,17 +17,27 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
+
   var _isLogin = true;
   var _enteredEmail = '';
   var _enteredPassword = '';
+  File? _selectedImage;
+  var _isOnAuth = false;
+
   Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
+
+    // Ne pas soumettre si le formulaire n'est pas valide ou aucun avatar n'est séléctionner
+    if (!isValid || !_isLogin && _selectedImage == null) {
       return;
     }
+
     _formKey.currentState!.save();
 
     try {
+      setState(() {
+        _isOnAuth = true;
+      });
       if (_isLogin) {
         final userCredential = await _firebase.signInWithEmailAndPassword(
           email: _enteredEmail,
@@ -34,6 +49,24 @@ class _AuthPageState extends State<AuthPage> {
           email: _enteredEmail,
           password: _enteredPassword,
         );
+
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${userCredential.user!.uid}.jpg');
+
+        await storageRef.putFile(_selectedImage!);
+        final imageUrl = await storageRef.getDownloadURL();
+        print('imageUrl: $imageUrl');
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'username': '',
+          'email': _enteredEmail,
+          'image_url': imageUrl,
+        });
       }
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -42,6 +75,9 @@ class _AuthPageState extends State<AuthPage> {
         duration: Duration(seconds: 5),
       ));
       print(error);
+      setState(() {
+        _isOnAuth = false;
+      });
     }
   }
 
@@ -70,6 +106,12 @@ class _AuthPageState extends State<AuthPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          if (!_isLogin)
+                            UserImagePicker(
+                              onPickImage: (pickedImage) {
+                                _selectedImage = pickedImage;
+                              },
+                            ),
                           TextFormField(
                             decoration:
                                 const InputDecoration(labelText: 'Email'),
@@ -103,16 +145,19 @@ class _AuthPageState extends State<AuthPage> {
                             },
                           ),
                           const SizedBox(height: 12),
+                          if (_isOnAuth) const CircularProgressIndicator(),
                           ElevatedButton(
-                            onPressed: _submit,
+                            onPressed: !_isOnAuth ? _submit : null,
                             child: Text(_isLogin ? 'Login' : 'Signup'),
                           ),
                           TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
+                            onPressed: !_isOnAuth
+                                ? () {
+                                    setState(() {
+                                      _isLogin = !_isLogin;
+                                    });
+                                  }
+                                : null,
                             child: Text(_isLogin
                                 ? 'Create a new account'
                                 : 'Already have an account'),
