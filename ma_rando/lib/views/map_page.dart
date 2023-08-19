@@ -8,6 +8,7 @@ import 'package:ma_rando/views/map_view.dart';
 import 'package:ma_rando/views/widgets/map_app_bar_view.dart';
 
 import '../services/LocationManager.dart';
+import 'add_parcours_page.dart';
 
 class MapPage extends StatefulWidget {
   final Position startPosition;
@@ -65,7 +66,7 @@ class _MapPageState extends State<MapPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Add your onPressed code here!
+          addNewParcours();
         },
         label: const Text('Enregistrer'),
         backgroundColor: Colors.green,
@@ -114,6 +115,12 @@ class _MapPageState extends State<MapPage> {
       }
       zoom = mapController.zoom;
     });
+  }
+
+  addNewParcours() {
+    final next = AddParcoursPage(listId: 0, currentPosition: center);
+    final route = MaterialPageRoute(builder: (context) => next);
+    Navigator.of(context).push(route);
   }
 
   updatePosition(Position position) {

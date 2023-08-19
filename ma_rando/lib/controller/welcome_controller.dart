@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ma_rando/controller/ProfileController.dart';
+import 'package:ma_rando/controller/profile_controller.dart';
 import 'package:ma_rando/controller/login_controller.dart';
 import 'package:ma_rando/controller/register_controller.dart';
 import 'package:ma_rando/views/widgets/profile_page.dart';

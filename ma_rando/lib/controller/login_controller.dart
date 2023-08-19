@@ -4,7 +4,7 @@ import 'package:ma_rando/views/widgets/profile_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../constants.dart';
-import 'ProfileController.dart';
+import 'profile_controller.dart';
 
 class LoginController extends StatefulWidget {
   static const String id = 'login_controller';

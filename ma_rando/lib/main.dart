@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ma_rando/controller/LoginWrapper.dart';
+import 'package:ma_rando/controller/login_wrapper.dart';
 import 'package:ma_rando/controller/home_map_controller.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
 import 'package:ma_rando/models/parcours_list.dart';
 import 'package:ma_rando/views/home_page.dart';
 import 'package:ma_rando/views/navigation_home.dart';
 import 'package:ma_rando/views/parcours_list_view.dart';
-import 'package:ma_rando/views/profile/ProfileNavigator.dart';
+import 'package:ma_rando/views/profile/profile_navigator.dart';
 import 'package:ma_rando/views/profile/auth.dart';
 
 Future<void> main() async {

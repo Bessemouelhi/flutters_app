@@ -4,7 +4,7 @@ import 'package:ma_rando/views/widgets/rounded_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import 'ProfileController.dart';
+import 'profile_controller.dart';
 
 class RegistrationController extends StatefulWidget {
   static const String id = 'registration_controller';

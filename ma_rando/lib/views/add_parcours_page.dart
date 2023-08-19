@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:ma_rando/models/parcours.dart';
 import 'package:ma_rando/views/widgets/add_text_field.dart';
 import 'package:ma_rando/views/widgets/custom_app_bar.dart';
@@ -11,7 +14,8 @@ import '../services/database_client.dart';
 class AddParcoursPage extends StatefulWidget {
   int? listId;
   Parcours? parcours;
-  AddParcoursPage({required this.listId, this.parcours});
+  LatLng? currentPosition;
+  AddParcoursPage({required this.listId, this.parcours, this.currentPosition});
 
   @override
   AddState createState() => AddState();
@@ -23,9 +27,13 @@ class AddState extends State<AddParcoursPage> {
   late TextEditingController dureeController;
   late TextEditingController difficulteController;
   String? imagePath;
+  String? _currentAddress;
+  double? lat;
+  double? lng;
 
   @override
   void initState() {
+    print('center ${widget.currentPosition}');
     nomController = TextEditingController();
     distanceController = TextEditingController();
     dureeController = TextEditingController();
@@ -34,6 +42,7 @@ class AddState extends State<AddParcoursPage> {
     if (widget.parcours != null) {
       fillForm(widget.parcours!);
     }
+    _getAddressFromLatLng();
     super.initState();
   }
 
@@ -44,6 +53,25 @@ class AddState extends State<AddParcoursPage> {
     dureeController.dispose();
     difficulteController.dispose();
     super.dispose();
+  }
+
+  Future<void> _getAddressFromLatLng() async {
+    if (widget.parcours == null) {
+      lat = widget.currentPosition!.latitude;
+      lng = widget.currentPosition!.longitude;
+    }
+    await placemarkFromCoordinates(lat!, lng!)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+
+      print(_currentAddress);
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   @override
@@ -99,7 +127,10 @@ class AddState extends State<AddParcoursPage> {
                       type: TextInputType.number),
                 ],
               ),
-            )
+            ),
+            Text('LAT: ${widget.currentPosition?.latitude ?? ""}'),
+            Text('LNG: ${widget.currentPosition?.longitude ?? ""}'),
+            Text('ADDRESS: ${_currentAddress ?? ""}'),
           ],
         ),
       ),
@@ -112,6 +143,8 @@ class AddState extends State<AddParcoursPage> {
     dureeController.text = parcours.duree!.toString();
     difficulteController.text = parcours.difficulte!.toString();
     imagePath = parcours.image;
+    lat = parcours.depart_lat;
+    lng = parcours.depart_lng;
   }
 
   addPressed() {
@@ -131,6 +164,8 @@ class AddState extends State<AddParcoursPage> {
     num difficulte = int.tryParse(difficulteController.text) ?? 0;
     map["difficulte"] = difficulte;
     map["note"] = 0;
+    map["depart_lat"] = widget.currentPosition?.latitude;
+    map["depart_lng"] = widget.currentPosition?.longitude;
     map["date"] = DateTime.now().millisecondsSinceEpoch;
     if (imagePath != null) map["image"] = imagePath!;
     print(map);
