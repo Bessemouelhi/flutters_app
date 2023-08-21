@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_rando/controller/login_wrapper.dart';
 import 'package:ma_rando/controller/home_map_controller.dart';
+import 'package:ma_rando/controller/weather_controller.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
 import 'package:ma_rando/models/parcours_list.dart';
 import 'package:ma_rando/views/home_page.dart';
@@ -105,11 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
         HomeMapController(),
         ProfileNavigator(),
-        Container(
-          color: Colors.purple,
-          alignment: Alignment.center,
-          child: const Text('Purple'),
-        ),
+        WeatherController()
+        // Container(
+        //   color: Colors.purple,
+        //   alignment: Alignment.center,
+        //   child: const Text('Purple'),
+        // ),
       ][currentPageIndex],
     );
   }

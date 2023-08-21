@@ -77,8 +77,7 @@ class _LoginControllerState extends State<LoginController> {
                         if (user != null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfilePage(loggedInUser: user),
+                              builder: (context) => ProfilePage(),
                             ),
                           );
                           setState(() {

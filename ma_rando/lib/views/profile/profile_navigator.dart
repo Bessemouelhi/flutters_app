@@ -27,7 +27,7 @@ class ProfileNavigator extends StatelessWidget {
                 .collection('users')
                 .doc(_user?.uid)
                 .get();*/
-            return ProfilePage(loggedInUser: FirebaseAuth.instance);
+            return ProfilePage();
           }
 
           return const AuthPage();

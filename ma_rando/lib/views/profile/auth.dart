@@ -93,8 +93,8 @@ class _AuthPageState extends State<AuthPage> {
             children: [
               Container(
                 margin:
-                    EdgeInsets.only(top: 30, bottom: 20, left: 20, right: 20),
-                width: 200,
+                    EdgeInsets.only(top: 15, bottom: 10, left: 10, right: 10),
+                width: 50,
                 child: Image.asset('images/logo.png'),
               ),
               Card(

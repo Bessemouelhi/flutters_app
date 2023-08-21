@@ -31,9 +31,7 @@ class _WelcomeControllerState extends State<WelcomeController> {
         print('User is logged - email ${loggedInUser.email}');
 
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => ProfilePage(loggedInUser: loggedInUser)));
+            context, MaterialPageRoute(builder: (_) => ProfilePage()));
       }
     } catch (e) {
       print(e);
@@ -56,7 +54,7 @@ class _WelcomeControllerState extends State<WelcomeController> {
               children: <Widget>[
                 Container(
                   child: Image.asset('images/logo.png'),
-                  height: 60.0,
+                  height: 30.0,
                 ),
                 Text(
                   'Flash Chat',

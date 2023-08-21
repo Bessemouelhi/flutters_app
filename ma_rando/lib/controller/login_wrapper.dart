@@ -14,7 +14,7 @@ class LoginWrapper extends StatelessWidget {
     if (user == null) {
       return WelcomeController();
     } else {
-      return ProfilePage(loggedInUser: user);
+      return ProfilePage();
     }
   }
 }
