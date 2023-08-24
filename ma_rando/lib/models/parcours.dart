@@ -10,9 +10,21 @@ class Parcours {
   int? date;
   String? image;
   int? list;
+  String? user_id;
 
-  Parcours(this.id, this.nom, this.distance, this.depart_lat, this.depart_lng,
-      this.duree, this.difficulte, this.note, this.date, this.image, this.list);
+  Parcours(
+      {this.id,
+      this.nom,
+      this.distance,
+      this.depart_lat,
+      this.depart_lng,
+      this.duree,
+      this.difficulte,
+      this.note,
+      this.date,
+      this.image,
+      this.user_id,
+      this.list});
 
   Parcours.fromMap(Map<String, dynamic> map)
       : id = map["id"],

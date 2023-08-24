@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:ma_rando/models/parcours.dart';
+import 'package:ma_rando/services/FirebaseService.dart';
 import 'package:ma_rando/views/widgets/add_text_field.dart';
 import 'package:ma_rando/views/widgets/custom_app_bar.dart';
 
@@ -22,11 +24,15 @@ class AddParcoursPage extends StatefulWidget {
 }
 
 class AddState extends State<AddParcoursPage> {
+  final _currentUser = FirebaseAuth.instance.currentUser;
+
   late TextEditingController nomController;
   late TextEditingController distanceController;
   late TextEditingController dureeController;
   late TextEditingController difficulteController;
+
   String? imagePath;
+  XFile? _xFile;
   String? _currentAddress;
   double? lat;
   double? lng;
@@ -76,6 +82,7 @@ class AddState extends State<AddParcoursPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mobilHeight = MediaQuery.of(context).size.height * 0.25;
     return Scaffold(
       appBar: CustomAppBar(
           titleString: "Ajouter un parcours",
@@ -97,9 +104,16 @@ class AddState extends State<AddParcoursPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  (imagePath == null)
-                      ? const Icon(Icons.camera, size: 128)
-                      : Image.file(File(imagePath!)),
+                  Container(
+                    height: mobilHeight,
+                    margin: EdgeInsets.all(8.0),
+                    color: Colors.grey,
+                    child: (imagePath == null)
+                        ? const Icon(Icons.camera, size: 128)
+                        : Image(
+                            image: FileImage(File(imagePath!)),
+                            fit: BoxFit.cover),
+                  ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -147,6 +161,25 @@ class AddState extends State<AddParcoursPage> {
     lng = parcours.depart_lng;
   }
 
+  addToFirestore() async {
+    FirebaseService service = FirebaseService();
+    String imageUrl = await service.uploadFile(File(_xFile!.path));
+    print('imageUrl $imageUrl');
+
+    service.addParcours(
+      Parcours(
+          nom: nomController.text,
+          distance: double.tryParse(distanceController.text) ?? 0.0,
+          depart_lat: widget.currentPosition?.latitude,
+          depart_lng: widget.currentPosition?.longitude,
+          duree: double.tryParse(dureeController.text) ?? 0.0,
+          difficulte: int.tryParse(difficulteController.text) ?? 0,
+          note: 0,
+          image: imageUrl,
+          user_id: _currentUser?.uid),
+    );
+  }
+
   addPressed() {
     FocusScope.of(context).requestFocus(FocusNode()); //fermeture du clavier
     if (nomController.text.isEmpty) return;
@@ -171,14 +204,17 @@ class AddState extends State<AddParcoursPage> {
     print(map);
     Parcours parcours = Parcours.fromMap(map);
     print(parcours);
+    if (_currentUser != null) {
+      addToFirestore();
+    }
     DatabaseClient().upsert(parcours).then((success) => Navigator.pop(context));
   }
 
   takePicture(ImageSource source) async {
-    XFile? xFile = await ImagePicker().pickImage(source: source);
-    if (xFile == null) return;
+    _xFile = await ImagePicker().pickImage(source: source);
+    if (_xFile == null) return;
     setState(() {
-      imagePath = xFile!.path;
+      imagePath = _xFile!.path;
     });
   }
 }
