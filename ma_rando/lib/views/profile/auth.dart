@@ -72,7 +72,7 @@ class _AuthPageState extends State<AuthPage> {
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(error.message ?? 'Autentication failed.'),
+        content: Text(error.message ?? 'Authentication failed.'),
         duration: Duration(seconds: 5),
       ));
       print(error);

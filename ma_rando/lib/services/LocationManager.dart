@@ -7,6 +7,7 @@ class LocationManager {
 
   Future<Position> start() async {
     final bool locationEnabled = await Geolocator.isLocationServiceEnabled();
+    print('locationEnabled $locationEnabled');
     return (locationEnabled)
         ? await handlePermission()
         : await errorString("Location désactivée");
@@ -23,16 +24,21 @@ class LocationManager {
       LocationPermission locationPermission) async {
     switch (locationPermission) {
       case LocationPermission.deniedForever:
+        print('deniedForever');
         return errorString("Permission refusée");
       case LocationPermission.denied:
+        print('denied');
         return request()
             .then((newPermission) => resultPermission(newPermission));
       case LocationPermission.unableToDetermine:
+        print('unableToDetermine');
         return request()
             .then((newPermission) => resultPermission(newPermission));
       case LocationPermission.whileInUse:
+        print('whileInUse');
         return await getPosition();
       case LocationPermission.always:
+        print('always');
         return await getPosition();
     }
   }

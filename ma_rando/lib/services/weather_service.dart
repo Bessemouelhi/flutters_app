@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../config.dart';
+import '../models/forecast.dart';
 import 'network_helper.dart';
 
 class WeatherService {
@@ -36,6 +37,39 @@ class WeatherService {
     var weatherData = await networkHelper.getData();
 
     return weatherData;
+  }
+
+  Future<List<Forecast>> getForecast(Position position) async {
+    Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/forecast', {
+      'lat': '${position.latitude}',
+      'lon': '${position.longitude}',
+      'appid': apiKey,
+      'units': 'metric',
+      'lang': 'fr',
+    });
+
+    print('uri $uri');
+
+    NetworkHelper networkHelper = NetworkHelper(uri);
+
+    var data = await networkHelper.getData();
+
+    // Le champ "list" contient les prévisions pour chaque intervalle de 3 heures
+    List<dynamic> forecastList = data["list"];
+
+    for (var forecast in forecastList) {
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(forecast["dt"] * 1000);
+      //double temperature = forecast["main"]["temp"];
+      String description = forecast["weather"][0]["description"];
+      String iconCode = forecast["weather"][0]["icon"];
+
+      print("Date/Time: $dateTime");
+      //print("Temperature: $temperature°C");
+      print("Description: $description");
+    }
+
+    return forecastList.map((forecast) => Forecast.fromJson(forecast)).toList();
   }
 
   String getWeatherIcon(int condition) {

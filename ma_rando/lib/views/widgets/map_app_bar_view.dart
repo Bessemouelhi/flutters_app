@@ -16,9 +16,9 @@ class MapAppBarView extends PreferredSize {
       required this.zoomOut,
       required this.followIcon})
       : super(
-            preferredSize: Size.fromHeight(125),
+            preferredSize: Size.fromHeight(75),
             child: Container(
-              color: Theme.of(context).primaryColorDark,
+              color: Colors.teal,
               child: SafeArea(
                 child: Column(
                   children: [
@@ -32,38 +32,38 @@ class MapAppBarView extends PreferredSize {
                             color: Colors.white,
                           ),
                           const Text(
-                            'Apprendre les Cartes',
+                            '',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontStyle: FontStyle.italic,
                                 fontSize: 20),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: followPosition,
+                                  icon: followIcon,
+                                  color: Colors.white,
+                                ),
+                                IconButton(
+                                  onPressed: zoomIn,
+                                  icon: const Icon(Icons.zoom_in),
+                                  color: Colors.white,
+                                ),
+                                IconButton(
+                                  onPressed: zoomOut,
+                                  icon: const Icon(Icons.zoom_out),
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: followPosition,
-                            icon: followIcon,
-                            color: Colors.white,
-                          ),
-                          IconButton(
-                            onPressed: zoomIn,
-                            icon: const Icon(Icons.zoom_in),
-                            color: Colors.white,
-                          ),
-                          IconButton(
-                            onPressed: zoomOut,
-                            icon: const Icon(Icons.zoom_out),
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),

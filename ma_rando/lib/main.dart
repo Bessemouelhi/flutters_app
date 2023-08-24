@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ma_rando/controller/login_wrapper.dart';
 import 'package:ma_rando/controller/home_map_controller.dart';
 import 'package:ma_rando/controller/weather_controller.dart';
@@ -86,8 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Profile',
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
+            icon: Icon(FontAwesomeIcons.cloudSun),
+            label: 'Météo',
           ),
         ],
         onDestinationSelected: (int index) {
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
       body: <Widget>[
-        ParcoursListView(parcoursList: new ParcoursList(1, 'nom')),
+        ParcoursListView(parcoursList: new ParcoursList(1, 'Mes parcours')),
         HomeMapController(),
         ProfileNavigator(),
         WeatherController()

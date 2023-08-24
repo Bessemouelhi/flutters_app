@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
+import 'package:ma_rando/utilities/utils.dart';
 import 'package:ma_rando/views/widgets/profile_app_bar.dart';
+
+import '../profile/user_image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,7 +19,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final currentUser = FirebaseAuth.instance.currentUser;
+  final _currentUser = FirebaseAuth.instance.currentUser;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  var _username;
+  var _email;
+  var _password;
+  File? _userImage;
+
+  signOut(BuildContext context) {
+    Navigator.of(context).pop;
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('users')
-                .doc(currentUser!.uid)
+                .doc(_currentUser!.uid)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -30,6 +49,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               }
               var userDoc = snapshot.data;
+              _username = userDoc?["username"];
+              _email = userDoc?["email"];
+              _usernameController.text = _username;
+              _emailController.text = _email;
+              //_userImage = userDoc?["image_url"];
               return SafeArea(
                 child: Column(
                   children: [
@@ -38,15 +62,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       backgroundImage: NetworkImage(userDoc?["image_url"]),
                     ),
                     Text(
-                      userDoc?["username"],
-                      style: TextStyle(
+                      _username,
+                      style: const TextStyle(
                         fontFamily: 'Pacifico',
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                       width: 150,
                       child: Divider(
@@ -55,21 +79,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Container(
                       padding: EdgeInsets.all(15),
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 25),
                       color: Colors.white,
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.email,
                             color: Colors.teal,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
-                            userDoc?["email"],
-                            style: TextStyle(
+                            _email,
+                            style: const TextStyle(
                               fontFamily: 'Source Sans Pro',
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -79,6 +103,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
+                    ElevatedButton(
+                      onPressed: () {
+                        openEditDialog();
+                      },
+                      child: const Text('Editer le profil'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        signOut(context);
+                      },
+                      child: const Text('Deconnexion'),
+                    )
                     // Card(
                     //   child: Column(
                     //     children: [
@@ -119,4 +155,87 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             }));
   }
+
+  Future openEditDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Edition du profil'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                UserImagePicker(
+                  onPickImage: (pickedImage) {
+                    _userImage = pickedImage;
+                  },
+                ),
+                TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(hintText: 'Username'),
+                ),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(hintText: 'Email'),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                TextField(
+                  onSubmitted: (value) {
+                    print(value);
+                  },
+                  controller: _passwordController,
+                  decoration: InputDecoration(hintText: 'Password'),
+                  obscureText: true,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () async {
+                  print("Username: ${_usernameController.text}");
+                  print("Email: ${_emailController.text}");
+                  print("Password: ${_passwordController.text}");
+                  print("User Image Path: ${_userImage?.path}");
+
+                  if (_passwordController.text == null) return;
+
+                  final userDoc = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(_currentUser!.uid);
+
+                  try {
+                    await _currentUser?.reauthenticateWithCredential(
+                      EmailAuthProvider.credential(
+                        email: _currentUser!.email!,
+                        password: _passwordController.text,
+                      ),
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    print('e.code : $e.code');
+                  }
+
+                  userDoc.update({
+                    'username': _usernameController.text,
+                    'email': _emailController.text
+                  });
+                  //userDoc.update({'email': _emailController.text});
+                  if (_userImage != null) {
+                    final storageRef = FirebaseStorage.instance
+                        .ref()
+                        .child('user_images')
+                        .child('${_currentUser!.uid}.jpg');
+
+                    await storageRef.putFile(_userImage!);
+                    final imageUrl = await storageRef.getDownloadURL();
+                    userDoc.update({'image_url': imageUrl});
+                  }
+                  _currentUser?.updateEmail(_emailController.text);
+
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pop();
+                },
+                child: Text('Envoyer'))
+          ],
+        ),
+      );
 }

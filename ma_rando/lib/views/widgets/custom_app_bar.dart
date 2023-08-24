@@ -11,6 +11,7 @@ class CustomAppBar extends AppBar {
       required this.callback})
       : super(
           title: Text(titleString),
+          backgroundColor: Colors.teal,
           actions: [
             TextButton(
               onPressed: callback,
