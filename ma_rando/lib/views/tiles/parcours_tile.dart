@@ -49,10 +49,12 @@ class ParcoursTile extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: Image.file(
-                      File(parcours.image!),
-                      height: 150,
-                      fit: BoxFit.fill,
+                    child: ClipRect(
+                      child: Image.file(
+                        File(parcours.image!),
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
                     )),
               ),
             Padding(
