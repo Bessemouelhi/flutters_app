@@ -25,29 +25,30 @@ class MapAppBarView extends PreferredSize {
                     Padding(
                       padding: const EdgeInsets.all(5),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          IconButton(
-                            onPressed: menuPressed,
-                            icon: const Icon(Icons.menu),
-                            color: Colors.white,
-                          ),
+                          // IconButton(
+                          //   onPressed: menuPressed,
+                          //   icon: const Icon(Icons.menu),
+                          //   color: Colors.white,
+                          // ),
                           const Text(
                             '',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontStyle: FontStyle.italic,
-                                fontSize: 20),
+                                fontSize: 18),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                IconButton(
-                                  onPressed: followPosition,
-                                  icon: followIcon,
-                                  color: Colors.white,
-                                ),
+                                // IconButton(
+                                //   onPressed: followPosition,
+                                //   icon: followIcon,
+                                //   color: Colors.white,
+                                // ),
                                 IconButton(
                                   onPressed: zoomIn,
                                   icon: const Icon(Icons.zoom_in),

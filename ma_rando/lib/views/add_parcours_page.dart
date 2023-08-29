@@ -24,49 +24,55 @@ class AddParcoursPage extends StatefulWidget {
 }
 
 class AddState extends State<AddParcoursPage> {
+  // Utilisateur actuellement connecté via Firebase
   final _currentUser = FirebaseAuth.instance.currentUser;
 
-  late TextEditingController nomController;
-  late TextEditingController distanceController;
-  late TextEditingController dureeController;
-  late TextEditingController difficulteController;
+  // Controllers pour les champs de texte
+  late TextEditingController _nomController;
+  late TextEditingController _distanceController;
+  late TextEditingController _dureeController;
+  late TextEditingController _difficulteController;
 
-  String? imagePath;
+  // Variables pour gérer les images, l'adresse et la geolocalisation
+  String? _imagePath;
   XFile? _xFile;
   String? _currentAddress;
-  double? lat;
-  double? lng;
+  double? _lat;
+  double? _lng;
 
   @override
   void initState() {
-    print('center ${widget.currentPosition}');
-    nomController = TextEditingController();
-    distanceController = TextEditingController();
-    dureeController = TextEditingController();
-    difficulteController = TextEditingController();
+    _nomController = TextEditingController();
+    _distanceController = TextEditingController();
+    _dureeController = TextEditingController();
+    _difficulteController = TextEditingController();
 
+    // Remplissage du formulaire si un parcours existe déjà (update)
     if (widget.parcours != null) {
       fillForm(widget.parcours!);
     }
+
+    // Obtenir l'adresse à partir des coordonnées
     _getAddressFromLatLng();
     super.initState();
   }
 
   @override
   void dispose() {
-    nomController.dispose();
-    distanceController.dispose();
-    dureeController.dispose();
-    difficulteController.dispose();
+    _nomController.dispose();
+    _distanceController.dispose();
+    _dureeController.dispose();
+    _difficulteController.dispose();
     super.dispose();
   }
 
+  // Méthode pour obtenir l'adresse à partir des coordonnées
   Future<void> _getAddressFromLatLng() async {
     if (widget.parcours == null) {
-      lat = widget.currentPosition!.latitude;
-      lng = widget.currentPosition!.longitude;
+      _lat = widget.currentPosition!.latitude;
+      _lng = widget.currentPosition!.longitude;
     }
-    await placemarkFromCoordinates(lat!, lng!)
+    await placemarkFromCoordinates(_lat!, _lng!)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
@@ -78,6 +84,18 @@ class AddState extends State<AddParcoursPage> {
     }).catchError((e) {
       debugPrint(e);
     });
+  }
+
+  String? get _errorText {
+    final text = _nomController.value.text;
+    if (text.isEmpty) {
+      return 'Ne peut être vide';
+    }
+    if (text.length < 4) {
+      return 'trop court';
+    }
+    // return null si le text est valide
+    return null;
   }
 
   @override
@@ -108,10 +126,10 @@ class AddState extends State<AddParcoursPage> {
                     height: mobilHeight,
                     margin: EdgeInsets.all(8.0),
                     color: Colors.grey,
-                    child: (imagePath == null)
+                    child: (_imagePath == null)
                         ? const Icon(Icons.camera, size: 128)
                         : Image(
-                            image: FileImage(File(imagePath!)),
+                            image: FileImage(File(_imagePath!)),
                             fit: BoxFit.cover),
                   ),
                   Row(
@@ -126,18 +144,21 @@ class AddState extends State<AddParcoursPage> {
                           icon: const Icon(Icons.photo_library_outlined)),
                     ],
                   ),
-                  AddTextfield(hint: "Nom", controller: nomController),
+                  AddTextfield(
+                      hint: "Nom",
+                      controller: _nomController,
+                      errorText: _errorText),
                   AddTextfield(
                       hint: "Distance",
-                      controller: distanceController,
+                      controller: _distanceController,
                       type: TextInputType.number),
                   AddTextfield(
                       hint: "Durée",
-                      controller: dureeController,
+                      controller: _dureeController,
                       type: TextInputType.number),
                   AddTextfield(
                       hint: "Difficulté",
-                      controller: difficulteController,
+                      controller: _difficulteController,
                       type: TextInputType.number),
                 ],
               ),
@@ -151,16 +172,18 @@ class AddState extends State<AddParcoursPage> {
     );
   }
 
+  // Remplit le formulaire avec les données d'un parcours existant
   fillForm(Parcours parcours) {
-    nomController.text = parcours.nom!;
-    distanceController.text = parcours.distance!.toString();
-    dureeController.text = parcours.duree!.toString();
-    difficulteController.text = parcours.difficulte!.toString();
-    imagePath = parcours.image;
-    lat = parcours.depart_lat;
-    lng = parcours.depart_lng;
+    _nomController.text = parcours.nom!;
+    _distanceController.text = parcours.distance!.toString();
+    _dureeController.text = parcours.duree!.toString();
+    _difficulteController.text = parcours.difficulte!.toString();
+    _imagePath = parcours.image;
+    _lat = parcours.depart_lat;
+    _lng = parcours.depart_lng;
   }
 
+  // Ajoute le parcours à Firestore
   addToFirestore() async {
     FirebaseService service = FirebaseService();
     String imageUrl = await service.uploadFile(File(_xFile!.path));
@@ -168,39 +191,40 @@ class AddState extends State<AddParcoursPage> {
 
     service.addParcours(
       Parcours(
-          nom: nomController.text,
-          distance: double.tryParse(distanceController.text) ?? 0.0,
+          nom: _nomController.text,
+          distance: double.tryParse(_distanceController.text) ?? 0.0,
           depart_lat: widget.currentPosition?.latitude,
           depart_lng: widget.currentPosition?.longitude,
-          duree: double.tryParse(dureeController.text) ?? 0.0,
-          difficulte: int.tryParse(difficulteController.text) ?? 0,
+          duree: double.tryParse(_dureeController.text) ?? 0.0,
+          difficulte: int.tryParse(_difficulteController.text) ?? 0,
           note: 0,
           image: imageUrl,
           user_id: _currentUser?.uid),
     );
   }
 
+  // Méthode appelée lorsque le bouton "Ajouter" est pressé
   addPressed() {
     FocusScope.of(context).requestFocus(FocusNode()); //fermeture du clavier
-    if (nomController.text.isEmpty) return;
+    if (_nomController.text.isEmpty) return;
     Map<String, dynamic> map = {'list': widget.listId};
     if (widget.parcours != null) map["id"] = widget.parcours?.id;
-    map["nom"] = nomController.text;
-    if (distanceController.text.isNotEmpty) map[""] = distanceController.text;
-    double distance = double.tryParse(distanceController.text) ?? 0.0;
+    map["nom"] = _nomController.text;
+    if (_distanceController.text.isNotEmpty) map[""] = _distanceController.text;
+    double distance = double.tryParse(_distanceController.text) ?? 0.0;
     map["distance"] = distance;
-    if (dureeController.text.isNotEmpty) map[""] = dureeController.text;
-    double duree = double.tryParse(dureeController.text) ?? 0.0;
+    if (_dureeController.text.isNotEmpty) map[""] = _dureeController.text;
+    double duree = double.tryParse(_dureeController.text) ?? 0.0;
     map["duree"] = duree;
-    if (difficulteController.text.isNotEmpty)
-      map[""] = difficulteController.text;
-    num difficulte = int.tryParse(difficulteController.text) ?? 0;
+    if (_difficulteController.text.isNotEmpty)
+      map[""] = _difficulteController.text;
+    num difficulte = int.tryParse(_difficulteController.text) ?? 0;
     map["difficulte"] = difficulte;
     map["note"] = 0;
     map["depart_lat"] = widget.currentPosition?.latitude;
     map["depart_lng"] = widget.currentPosition?.longitude;
     map["date"] = DateTime.now().millisecondsSinceEpoch;
-    if (imagePath != null) map["image"] = imagePath!;
+    if (_imagePath != null) map["image"] = _imagePath!;
     print(map);
     Parcours parcours = Parcours.fromMap(map);
     print(parcours);
@@ -210,11 +234,12 @@ class AddState extends State<AddParcoursPage> {
     DatabaseClient().upsert(parcours).then((success) => Navigator.pop(context));
   }
 
+  // Prend une image à partir d'une source donnée (caméra ou galerie)
   takePicture(ImageSource source) async {
     _xFile = await ImagePicker().pickImage(source: source);
     if (_xFile == null) return;
     setState(() {
-      imagePath = _xFile!.path;
+      _imagePath = _xFile!.path;
     });
   }
 }
