@@ -73,6 +73,6 @@ class _ParcoursListViewState extends State<ParcoursListView> {
 
   deleteParcours(BuildContext context, Parcours parcours) {
     print('on delete');
-    DatabaseClient().removeItem(parcours).then((success) => getParcours());
+    DatabaseClient().remove(parcours).then((success) => getParcours());
   }
 }

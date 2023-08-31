@@ -8,14 +8,14 @@ import 'package:ma_rando/views/profile/user_image_picker.dart';
 
 final _firebase = FirebaseAuth.instance;
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+class AuthController extends StatefulWidget {
+  const AuthController({super.key});
 
   @override
-  State<AuthPage> createState() => _AuthPageState();
+  State<AuthController> createState() => _AuthControllerState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthControllerState extends State<AuthController> {
   final _formKey = GlobalKey<FormState>();
 
   var _isLogin = true;
@@ -85,18 +85,18 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.teal,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                margin:
-                    EdgeInsets.only(top: 15, bottom: 10, left: 10, right: 10),
-                width: 50,
-                child: Image.asset('images/logo.png'),
-              ),
+              // Container(
+              //   margin:
+              //       EdgeInsets.only(top: 15, bottom: 10, left: 10, right: 10),
+              //   width: 50,
+              //   child: Image.asset('images/logo.png'),
+              // ),
               Card(
                 margin: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
@@ -123,7 +123,7 @@ class _AuthPageState extends State<AuthPage> {
                               if (value == null ||
                                   value.trim().isEmpty ||
                                   !value.contains('@')) {
-                                return 'Please enter a valid email address !';
+                                return 'Veuillez mettre une adresse email valide !';
                               }
                               return null;
                             },
@@ -140,7 +140,7 @@ class _AuthPageState extends State<AuthPage> {
                                 if (value == null ||
                                     value.isEmpty ||
                                     value.trim().length < 4) {
-                                  return 'Please enter at least 4 characteres.';
+                                  return 'Veuillez saisir au moins 4 caractères.';
                                 }
                                 return null;
                               },
@@ -154,7 +154,7 @@ class _AuthPageState extends State<AuthPage> {
                             obscureText: true,
                             validator: (value) {
                               if (value == null || value.trim().length < 6) {
-                                return 'Password must be at least 6 characters long';
+                                return 'Le mot de passe doit contenir au moins 6 caractères.';
                               }
                               return null;
                             },
@@ -166,7 +166,7 @@ class _AuthPageState extends State<AuthPage> {
                           if (_isOnAuth) const CircularProgressIndicator(),
                           ElevatedButton(
                             onPressed: !_isOnAuth ? _submit : null,
-                            child: Text(_isLogin ? 'Login' : 'Signup'),
+                            child: Text(_isLogin ? 'Connexion' : 'Inscription'),
                           ),
                           TextButton(
                             onPressed: !_isOnAuth
@@ -177,8 +177,8 @@ class _AuthPageState extends State<AuthPage> {
                                   }
                                 : null,
                             child: Text(_isLogin
-                                ? 'Create a new account'
-                                : 'Already have an account'),
+                                ? 'Creer un nouveau compte'
+                                : 'Vous avez déjà un compte'),
                           ),
                         ],
                       ),

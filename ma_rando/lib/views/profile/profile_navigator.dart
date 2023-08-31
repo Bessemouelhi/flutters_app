@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ma_rando/views/profile/auth.dart';
+import 'package:ma_rando/views/profile/auth_controller.dart';
 import 'package:ma_rando/views/profile/splash_screen.dart';
 import 'package:ma_rando/views/widgets/profile_page.dart';
 
@@ -30,7 +30,7 @@ class ProfileNavigator extends StatelessWidget {
             return ProfilePage();
           }
 
-          return const AuthPage();
+          return const AuthController();
         },
       ),
     );

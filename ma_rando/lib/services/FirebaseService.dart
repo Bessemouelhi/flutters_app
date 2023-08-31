@@ -21,7 +21,7 @@ class FirebaseService {
     return imageUrl;
   }
 
-  // ajput du parcours dans la BDD Firestore
+  // ajout du parcours dans la BDD Firestore
   addParcours(Parcours parcours) {
     _parcours.add({
       "nom": parcours.nom,

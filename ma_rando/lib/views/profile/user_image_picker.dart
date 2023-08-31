@@ -42,6 +42,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
             foregroundImage:
                 _pickedImageFile != null ? FileImage(_pickedImageFile!) : null),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton.icon(
               onPressed: () {

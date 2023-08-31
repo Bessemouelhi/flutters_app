@@ -69,8 +69,8 @@ class DatabaseClient {
     return true;
   }
 
-  // Cette méthode supprime une liste de parcours et tous les parcours associés
-  Future<bool> removeItem(Parcours parcours) async {
+  // Cette méthode un parcours
+  Future<bool> remove(Parcours parcours) async {
     Database db = await database;
     await db.delete('parcours', where: 'id = ?', whereArgs: [parcours.id]);
     return true;
@@ -94,7 +94,7 @@ class DatabaseClient {
     return mapList.map((map) => Parcours.fromMap(map)).toList();
   }
 
-  // Cette méthode récupère tous les parcours de toutes les listes
+  // Cette méthode récupère tous les parcours
   Future<List<Parcours>> parcoursAll() async {
     Database db = await database;
     List<Map<String, dynamic>> mapList = await db.query('parcours');
