@@ -17,4 +17,17 @@ class NetworkHelper {
 
     print(response.statusCode);
   }
+
+  Future getDataTest({http.Client? client}) async {
+    client ??= http.Client();
+
+    http.Response response = await client.get(uri);
+
+    if (response.statusCode == 200) {
+      String data = response.body;
+      return jsonDecode(data);
+    }
+
+    print(response.statusCode);
+  }
 }
