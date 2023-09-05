@@ -70,16 +70,16 @@ class _MyHomePageState extends State<MyHomePage> {
         animationDuration: const Duration(milliseconds: 1000),
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.person),
+            label: 'Profil',
           ),
           NavigationDestination(
             icon: Icon(Icons.explore),
             label: 'Explore',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.route),
+            label: 'Mes parcours',
           ),
           NavigationDestination(
             icon: Icon(FontAwesomeIcons.cloudSun),
@@ -99,9 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
         //labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
       body: <Widget>[
-        ParcoursListView(parcoursList: new ParcoursList(1, 'Mes parcours')),
-        HomeMapController(),
         ProfileNavigator(),
+        HomeMapController(),
+        ParcoursListView(parcoursList: new ParcoursList(1, 'Mes parcours')),
         WeatherController()
         // Container(
         //   color: Colors.purple,

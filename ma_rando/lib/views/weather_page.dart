@@ -125,7 +125,7 @@ class _WeatherPageState extends State<WeatherPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          TextButton(
+                          /*TextButton(
                             onPressed: () async {
                               /*var data = await model.getLocationWeather(context);
                       setState(() {
@@ -146,7 +146,7 @@ class _WeatherPageState extends State<WeatherPage> {
                               Icons.location_city,
                               size: 50.0,
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Text('$cityName', style: kShadowTextStyle),
