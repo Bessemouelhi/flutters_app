@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ma_rando/services/weather_service.dart';
 
-import '../utilities/constants.dart';
+import '../constants.dart';
 
 class WeatherPage extends StatefulWidget {
   final Position currentPosition;

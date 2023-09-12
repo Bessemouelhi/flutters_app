@@ -4,8 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ma_rando/services/weather_service.dart';
 
+import '../constants.dart';
 import '../models/forecast.dart';
-import '../utilities/constants.dart';
 
 class WeatherPage extends StatefulWidget {
   final Position currentPosition;

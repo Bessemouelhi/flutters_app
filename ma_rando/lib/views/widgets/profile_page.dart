@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ma_rando/controller/welcome_controller.dart';
-import 'package:ma_rando/utilities/utils.dart';
 import 'package:ma_rando/views/widgets/profile_app_bar.dart';
 
 import '../profile/user_image_picker.dart';

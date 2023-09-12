@@ -34,7 +34,7 @@ class NoDataController extends StatelessWidget {
                   color: Colors.teal,
                 ),
                 Text(
-                  'Aucune donnée pour le moment',
+                  'Chargement...',
                   style: TextStyle(
                       color: Colors.teal,
                       fontSize: 20,
